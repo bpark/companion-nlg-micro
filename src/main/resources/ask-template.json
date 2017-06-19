@@ -1,0 +1,28 @@
+{
+  "statements": [
+    {
+      "clause": {
+        "nounPhrase": {
+          "specifier": {
+            "element": "you",
+            "features": [
+              {
+                "POSSESIVE": true
+              }
+            ]
+          },
+          "noun": "day"
+        },
+        "verbPhrase": {
+          "verb": "be",
+          "features": [
+            {
+              "TENSE": "PAST"
+            }
+          ]
+        }
+      },
+      "features": [{"INTERROGATIVE_TYPE": "HOW"}]
+    }
+  ]
+}
