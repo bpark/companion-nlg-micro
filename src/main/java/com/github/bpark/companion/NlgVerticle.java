@@ -17,6 +17,7 @@ package com.github.bpark.companion;
 
 import com.github.bpark.companion.model.ConversationResponse;
 import com.github.bpark.companion.model.PhraseResponse;
+import com.github.bpark.companion.response.GeneratedResponse;
 import io.vertx.core.json.Json;
 import io.vertx.rxjava.core.AbstractVerticle;
 import io.vertx.rxjava.core.eventbus.EventBus;
@@ -63,7 +64,7 @@ public class NlgVerticle extends AbstractVerticle {
                 List<String> answers = phraseResponses.stream().map(phraseGenerator::generate).collect(Collectors.toList());
                 String answer = String.join(DELIMITER, answers);
 
-                return Single.just(answer).toObservable();
+                return Single.just(new GeneratedResponse(answer)).toObservable();
 
             }).flatMap(answer -> saveMessage(id, answer)).subscribe(a -> message.reply(id));
 
@@ -78,9 +79,9 @@ public class NlgVerticle extends AbstractVerticle {
                 .toObservable();
     }
 
-    private Observable<Void> saveMessage(String id, String answer) {
+    private Observable<Void> saveMessage(String id, GeneratedResponse generatedResponse) {
         return vertx.sharedData().<String, String>rxGetClusterWideMap(id)
-                .flatMap(map -> map.rxPut(NLG_KEY, Json.encode(answer)))
+                .flatMap(map -> map.rxPut(NLG_KEY, Json.encode(generatedResponse)))
                 .toObservable();
     }
 
